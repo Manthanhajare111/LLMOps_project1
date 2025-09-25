@@ -1,0 +1,6 @@
+.env
+LLMOps_project1.egg-info
+__pycache__/
+*.pyc
+logs/
+test.py
