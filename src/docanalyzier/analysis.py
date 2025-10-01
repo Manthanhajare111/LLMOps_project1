@@ -25,23 +25,18 @@ class DocumentAnalyzer:
         )
         self.logger.info("DocumentAnalyzer initialized with LLM and embedding model")
 
-    def analyze(self, text: str, prompt_key: str) -> DocumentAnalysisResult:
-        if prompt_key not in PROMPT_REGISTRY:
-            error_msg = f"Prompt key '{prompt_key}' not found in registry"
-            self.logger.error(error_msg)
-            raise ValueError(error_msg)
-
-        prompt_template = PROMPT_REGISTRY[prompt_key]
-        prompt = prompt_template.format(text=text)
-
+    def analyze(self, text: str, prompt_key: str) -> dict:
         try:
-            self.logger.info("Sending text to LLM for analysis", prompt_key=prompt_key)
-            response = self.llm.predict(prompt)
-            self.logger.info("LLM response received", response=response)
-
-            parsed_result = self.output_parser.parse(response)
-            self.logger.info("LLM response parsed successfully", parsed_result=parsed_result.dict())
-            return parsed_result
+            chain = self.prompt | self.llm | self.output_parser
+            
+            self.log.info("Metadata-analyziz chain initialized")
+            response = chain.invoke({
+                "format_instructions": self.output_parser.get_format_instructions(),
+                "document_text": text
+            })
+            self.log.info("Metadata-Extraction successful",key=list(response.keys()))
+            return response
+        
         except Exception as e:
             self.logger.error("Error during document analysis", error=str(e))
             raise DocumentPortalException("Failed to analyze document", sys) from e
