@@ -23,6 +23,7 @@ class DocumentAnalyzer:
             llm=self.llm,
             parser=self.json_parser
         )
+        self.prompt = PROMPT_REGISTRY["document_analysis"]
         self.logger.info("DocumentAnalyzer initialized with LLM and embedding model")
 
     def analyze(self, text: str, prompt_key: str) -> dict:
