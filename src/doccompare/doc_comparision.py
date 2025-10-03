@@ -1,10 +1,10 @@
 import sys
-from dotenv import load_env
+from dotenv import load_dotenv
 import pandas as pd
 from logger.custom_logger import CustomLogger
 from expections.custom_exception import DocumentPortalException
 from model.models import *
-from prompt.prompt_library import PROMPT_REGISTRY # type: ignore
+from prompt.prompt_lib import PROMPT_REGISTRY # type: ignore
 from utils.model_loader import ModelLoader
 from langchain_core.output_parsers import JsonOutputParser
 from langchain.output_parsers import OutputFixingParser
@@ -20,7 +20,7 @@ class DocumentComparer:
             parser=self.json_parser
         )
         self.prompt = PROMPT_REGISTRY["document_comparison"]
-        self.chain = self.prompt | self.llm | self.json_parser | self.output_parser 
+        self.chain = self.prompt | self.llm | self.json_parser 
         self.log.info("DocumentComparer initialized with LLM and output parser")
 
     def compare_documents(self,combined_docs:str)-> pd.DataFrame:
