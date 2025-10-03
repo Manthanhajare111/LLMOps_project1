@@ -1,6 +1,6 @@
 import sys
 from dotenv import load_env
-import pandas
+import pandas as pd
 from logger.custom_logger import CustomLogger
 from expections.custom_exception import DocumentPortalException
 from model.models import *
@@ -11,13 +11,40 @@ from langchain.output_parsers import OutputFixingParser
 
 class DocumentComparer:
     def __init__(self):
-        pass
+        self.model_loader = ModelLoader()
+        self.llm = self.model_loader.load_llm()
+        self.logger = CustomLogger().get_logger(__file__)
+        self.json_parser = JsonOutputParser(pydantic_object=SummaryResponse)
+        self.output_parser = OutputFixingParser.from_llm(
+            llm=self.llm,
+            parser=self.json_parser
+        )
+        self.prompt = PROMPT_REGISTRY["document_comparison"]
+        self.chain = self.prompt | self.llm | self.json_parser | self.output_parser 
+        self.log.info("DocumentComparer initialized with LLM and output parser")
 
-    def compare_documents(self):
+    def compare_documents(self,combined_docs:str)-> pd.DataFrame:
         """Compares two documents and identifies differences.  """
-        pass
+        try:
+            inputs= {
+                "combined_docs": combined_docs,
+                "format_instructions": self.output_parser.get_format_instructions()
+            }
+            self.log.info("Starting document comparison",inputs=inputs)
+            response = self.chain.invoke(inputs)
+            self.log.info("Document comparison completed", response=response)
+            self._format_resposnse(response)
 
-    def _format_resposnse(self):
+        except Exception as e:
+            self.logg.error("Error during document comparison", error=str(e))
+            raise DocumentPortalException("Failed to compare documents", sys) from e
+
+    def _format_resposnse(self,response_parsed: list[dict])->pd.DataFrame:
         """Formats the comparison response."""
-        pass
-    
+        try:
+            df = pd.DataFrame(response_parsed)
+            self.log.info("Formatted response into DataFrame", dataframe=df)
+            return df
+        except Exception as e:
+            self.logg.error("Error during document comparison", error=str(e))
+            raise DocumentPortalException("Failed to compare documents", sys) from e
