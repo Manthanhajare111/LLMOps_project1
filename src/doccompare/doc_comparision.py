@@ -13,7 +13,7 @@ class DocumentComparer:
     def __init__(self):
         self.model_loader = ModelLoader()
         self.llm = self.model_loader.load_llm()
-        self.logger = CustomLogger().get_logger(__file__)
+        self.log = CustomLogger().get_logger(__file__)
         self.json_parser = JsonOutputParser(pydantic_object=SummaryResponse)
         self.output_parser = OutputFixingParser.from_llm(
             llm=self.llm,

@@ -6,11 +6,11 @@ from expections.custom_exception import DocumentPortalException
 
 class DocumentIngestion:
 
-    def __init__(self,file_path,base_dir="src/data/doccomapare"):
+    def __init__(self,base_dir="src/data/doccomapare"):
         self.log = CustomLogger().get_logger(__file__)
         self.base_dir = Path(base_dir)
         self.base_dir.mkdir(parents=True, exist_ok=True)
-        self.file_path = file_path
+        # self.file_path = file_path
 
     def delete_existing_files(self):
         try:
@@ -48,10 +48,12 @@ class DocumentIngestion:
             self.log.error("Error reading PDF file", error=str(e))
             raise DocumentPortalException("Failed to read PDF file", sys)
 
-    def read_pdf(self,file_path)->str:
+    def read_pdf(self,file_path:Path)->str:
         """Reads the PDF and extracts text."""
         try:
-            with fitz.open(self.file_path) as doc:
+            # import pdb
+            # pdb.set_trace()
+            with fitz.open(file_path) as doc:
                 if doc.is_encrypted:
                     raise ValueError("PDF is encrypted and cannot be read.")
                 all_text = []
