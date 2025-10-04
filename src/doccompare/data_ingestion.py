@@ -3,13 +3,18 @@ from pathlib import Path
 import fitz
 from logger.custom_logger import CustomLogger
 from expections.custom_exception import DocumentPortalException
+from typing import Iterable, List, Optional, Dict, Any
 
 class DocumentIngestion:
 
-    def __init__(self,base_dir="src/data/doccomapare"):
+    def __init__(self,base_dir="src/data/doccomapare",session_id: Optional[str] = None):
         self.log = CustomLogger().get_logger(__file__)
         self.base_dir = Path(base_dir)
         self.base_dir.mkdir(parents=True, exist_ok=True)
+        self.session_id = session_id # or generate_session_id()
+        self.session_path = self.base_dir / self.session_id
+        self.session_path.mkdir(parents=True, exist_ok=True)
+        # log.info("DocumentComparator initialized", session_path=str(self.session_path))
         # self.file_path = file_path
 
     def delete_existing_files(self):
@@ -86,3 +91,23 @@ class DocumentIngestion:
         except Exception as e:
             self.log.error("Error combining documents", error=str(e))
             raise DocumentPortalException("Failed to combine documents", sys) 
+        
+    def clean_old_session(self,keep_latest=3):
+        """ 
+        Optional method to delete older session files, keeping only the latest 'keep_latest' files.
+        """
+        try:
+            session_folders = sorted(
+                [f for f in self.base_dir.iterdir() if f.is_dir()],
+                reverse=True
+
+            )
+            for folder in session_folders[keep_latest:]:
+                for file in folder.iterdir():
+                    if file.is_file():
+                        file.unlink()
+                folder.rmdir()
+                self.log.info(f"Deleted old session folder: {folder}")
+        except Exception as e:
+            self.log.error("Error cleaning old sessions", error=str(e))
+            raise DocumentPortalException("Failed to clean old sessions", sys)
