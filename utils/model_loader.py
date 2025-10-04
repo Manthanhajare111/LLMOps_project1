@@ -6,7 +6,7 @@ from utils.config_loader import load_config
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_groq import ChatGroq
 from logger import GLOBAL_LOGGER as log
-from expections.custom_exception import DocumentPortalException
+from excepctions.custom_exception import DocumentPortalException
 
 class ApiKeyManager:
     REQUIRED_KEYS = ["GROQ_API_KEY", "GOOGLE_API_KEY"]

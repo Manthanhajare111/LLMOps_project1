@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 import fitz
 from logger.custom_logger import CustomLogger
-from expections.custom_exception import DocumentPortalException
+from excepctions.custom_exception import DocumentPortalException
 from typing import Iterable, List, Optional, Dict, Any
 
 class DocumentIngestion:
