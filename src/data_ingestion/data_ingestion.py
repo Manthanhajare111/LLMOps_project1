@@ -13,7 +13,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from utils.model_loader import ModelLoader
 from logger import GLOBAL_LOGGER as log
-from excepctions.custom_exception import DocumentPortalException
+from exception.custom_exception import DocumentPortalException
 from utils.file_io import generate_session_id, save_uploaded_files
 from utils.document_ops import load_documents, concat_for_analysis, concat_for_comparison
 

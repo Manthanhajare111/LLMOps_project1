@@ -9,7 +9,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.vectorstores import FAISS
 
 from utils.model_loader import ModelLoader
-from excepctions.custom_exception import DocumentPortalException
+from exception.custom_exception import DocumentPortalException
 from logger import GLOBAL_LOGGER as log
 from prompt.prompt_lib import PROMPT_REGISTRY
 from model.models import PromptType
