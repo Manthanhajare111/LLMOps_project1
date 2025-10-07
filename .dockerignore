@@ -1,0 +1,10 @@
+__pyache__/
+*.pyc
+__pypackages__/
+.git
+.gitignore
+* .pyo
+* .pyd
+logs/
+* .logs
+. Python 
