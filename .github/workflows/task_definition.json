@@ -1,0 +1,39 @@
+{
+  "cpu": 1024,
+  "environment": [
+    {
+      "name": "ENV",
+      "value": "production"
+    }
+  ],
+  "essential": true,
+  "image": "468284643800.dkr.ecr.ap-southeast-2.amazonaws.com/documentportal",
+  "logConfiguration": {
+    "logDriver": "awslogs",
+    "options": {
+      "awslogs-group": "/ecs/documentportaltd",
+      "awslogs-create-group": "true",
+      "awslogs-region": "ap-southeast-2",
+      "awslogs-stream-prefix": "ecs"
+    }
+  },
+  "mountPoints": [],
+  "name": "document-portal-container",
+  "portMappings": [
+    {
+      "appProtocol": "http",
+      "containerPort": 8080,
+      "hostPort": 8080,
+      "name": "document-portal-container-8080-tcp",
+      "protocol": "tcp"
+    }
+  ],
+  "secrets": [
+    {
+      "name": "API_KEYS",
+      "valueFrom": "arn:aws:secretsmanager:eu-north-1:468284643800:secret:docs_api-wFgoQi"
+    }
+  ],
+  "systemControls": [],
+  "volumesFrom": []
+}
