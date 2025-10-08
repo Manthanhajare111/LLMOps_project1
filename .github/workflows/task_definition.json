@@ -1,5 +1,5 @@
 {
-  "family": "document-portal-task",
+  "family": "documentportaltd",
   "executionRoleArn": "arn:aws:iam::468284643800:role/ecsTaskExecutionRole",
   "networkMode": "awsvpc",
   "requiresCompatibilities": ["FARGATE"],
@@ -10,6 +10,7 @@
       "name": "document-portal-container",
       "image": "468284643800.dkr.ecr.ap-southeast-2.amazonaws.com/documentportal",
       "essential": true,
+      "cpu":1024,
       "environment": [
         {
           "name": "ENV",
@@ -38,7 +39,7 @@
       "secrets": [
         {
           "name": "API_KEYS",
-          "valueFrom": "arn:aws:secretsmanager:ap-southeast-2:468284643800:secret:docs-api-Qu2MV6"
+          "valueFrom": "arn:aws:secretsmanager:ap-southeast-2:468284643800:secret:docs_api-k5U2Fo"
         }
       ],
       "systemControls": [],
