@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   check-status:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest 
     if: ${{github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main'}}
     steps:
       - name: CI passed on main branch
@@ -95,4 +95,4 @@ jobs:
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
       - name: Done!
-        run: echo "Deployed to ECS Fargate Successfully"
+        run: echo "Deployed to ECS Fargate Successfully."
